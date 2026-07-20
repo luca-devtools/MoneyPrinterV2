@@ -44,6 +44,10 @@ All your configurations will be in a file in the root directory, called `config.
     - `platforms`: `string[]` - Platforms to target. Supported values in v1 are `tiktok` and `instagram`.
     - `account_ids`: `number[]` - Optional fixed Post Bridge account IDs to avoid account-selection prompts.
     - `auto_crosspost`: `boolean` - If `true`, cross-post automatically after a successful YouTube upload. If `false`, interactive runs ask and cron runs skip.
+- `larry_david`: `object` - Optional. Defaults for the "Find Larry David Videos" menu option. The whole block may be omitted.
+    - `search_query`: `string` - Default YouTube search query (default: `Larry David Curb Your Enthusiasm`).
+    - `max_results`: `number` - Maximum number of videos returned per search (default: `15`).
+    - `must_match`: `string[]` - Case-insensitive terms; a result is kept when any term appears in its title, channel or description (default: `["larry david", "curb"]`). Use `[]` to keep every result the search returns.
 
 ## Example
 
@@ -88,6 +92,11 @@ All your configurations will be in a file in the root directory, called `config.
     "platforms": ["tiktok", "instagram"],
     "account_ids": [],
     "auto_crosspost": false
+  },
+  "larry_david": {
+    "search_query": "Larry David Curb Your Enthusiasm",
+    "max_results": 15,
+    "must_match": ["larry david", "curb"]
   }
 }
 ```
