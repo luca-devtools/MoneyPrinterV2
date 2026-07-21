@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Larry David Video Finder</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>" />
+</head>
+<body data-page="find">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/"><span class="dot"></span> Video Finder</a>
+      <nav class="nav">
+        <a href="/" class="active">Find</a>
+        <a href="/saved">Saved <span class="badge" id="savedBadge" data-count="0"></span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>Find Larry David videos</h1>
+      <p>Search YouTube for Larry David / <em>Curb Your Enthusiasm</em> clips and save the ones you want.</p>
+    </div>
+
+    <form class="search-card" id="searchForm">
+      <div class="search-row">
+        <div class="field grow">
+          <label for="query">Search query</label>
+          <input type="text" id="query" name="query" value="Larry David Curb Your Enthusiasm" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="max">Max results</label>
+          <input type="number" id="max" name="max" value="15" min="1" max="50" />
+        </div>
+        <label class="check">
+          <input type="checkbox" id="onlyLD" checked />
+          Only Larry David / Curb
+        </label>
+        <button type="submit" class="btn btn-primary" id="searchBtn">Search</button>
+      </div>
+    </form>
+
+    <div class="toolbar hidden" id="toolbar">
+      <h2>Results</h2>
+      <span class="count" id="resultCount"></span>
+    </div>
+
+    <div class="grid" id="results"></div>
+
+    <div class="state hidden" id="loading">
+      <div class="spinner"></div>
+      Searching YouTube…
+    </div>
+
+    <div class="state hidden" id="empty">
+      <div class="big">🔍</div>
+      No matching videos found. Try a different query, or uncheck the filter.
+    </div>
+
+    <div class="state error hidden" id="error"></div>
+
+    <p class="note">
+      Results are scraped from YouTube's public pages. Saved videos are stored in
+      this browser only (not synced with the MPV2 CLI). If searches consistently
+      return nothing, YouTube may have changed its page markup.
+    </p>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
