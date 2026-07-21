@@ -191,3 +191,64 @@ def get_results_cache_path() -> str:
         path (str): The path to the results cache folder
     """
     return os.path.join(get_cache_path(), 'scraper_results.csv')
+
+def get_video_finds_path() -> str:
+    """
+    Gets the path to the video finder cache file.
+
+    Returns:
+        path (str): The path to the video finds cache file
+    """
+    return os.path.join(get_cache_path(), 'video_finds.json')
+
+def get_video_finds() -> List[dict]:
+    """
+    Gets the identified videos from the cache.
+
+    Returns:
+        videos (List[dict]): The cached videos
+    """
+    path = get_video_finds_path()
+
+    if not os.path.exists(path):
+        # Create the cache file
+        with open(path, 'w') as file:
+            json.dump({
+                "videos": []
+            }, file, indent=4)
+
+    with open(path, 'r') as file:
+        parsed = json.load(file)
+
+    if not isinstance(parsed, dict):
+        return []
+
+    return parsed.get("videos", [])
+
+def add_video_finds(videos: List[dict]) -> int:
+    """
+    Adds identified videos to the cache, skipping ones already stored.
+
+    Args:
+        videos (List[dict]): The videos to add
+
+    Returns:
+        added (int): The number of newly stored videos
+    """
+    existing = get_video_finds()
+    existing_ids = {video.get("video_id") for video in existing}
+
+    added = 0
+    for video in videos:
+        video_id = video.get("video_id")
+        if video_id and video_id not in existing_ids:
+            existing.append(video)
+            existing_ids.add(video_id)
+            added += 1
+
+    with open(get_video_finds_path(), 'w') as file:
+        json.dump({
+            "videos": existing
+        }, file, indent=4)
+
+    return added
