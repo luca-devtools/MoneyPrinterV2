@@ -14,6 +14,7 @@ from classes.Twitter import Twitter
 from classes.YouTube import YouTube
 from prettytable import PrettyTable
 from classes.Outreach import Outreach
+from classes.VideoFinder import VideoFinder
 from classes.AFM import AffiliateMarketing
 from llm_provider import list_models, select_model, get_active_model
 from post_bridge_integration import maybe_crosspost_youtube_short
@@ -427,6 +428,31 @@ def main():
 
         outreach.start()
     elif user_input == 5:
+        info("Starting Larry David Video Finder...")
+
+        ld_config = get_larry_david_config()
+
+        query = question(f"Search query (default: '{ld_config['search_query']}'): ").strip()
+        if query == "":
+            query = ld_config["search_query"]
+
+        max_results_input = question(f"Max results (default: {ld_config['max_results']}): ").strip()
+        try:
+            max_results = int(max_results_input) if max_results_input else ld_config["max_results"]
+        except ValueError:
+            warning("Invalid number. Using the configured default.")
+            max_results = ld_config["max_results"]
+
+        finder = VideoFinder(query=query, max_results=max_results)
+        videos = finder.search()
+        finder.display(videos)
+
+        if videos:
+            save_input = question("Save these videos to the cache? (Yes/No): ").strip().lower()
+            if save_input == "yes":
+                added = finder.save(videos)
+                success(f"Saved {added} new video(s) to the cache.")
+    elif user_input == 6:
         if get_verbose():
             print(colored(" => Quitting...", "blue"))
         sys.exit(0)

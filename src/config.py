@@ -403,3 +403,52 @@ def get_post_bridge_config() -> dict:
             raw_config.get("auto_crosspost", defaults["auto_crosspost"])
         ),
     }
+
+def get_larry_david_config() -> dict:
+    """
+    Gets the Larry David video finder configuration with safe defaults.
+
+    The block is optional, so every value falls back to a sensible default when
+    it is missing or malformed. This keeps existing ``config.json`` files that
+    predate the video finder working without changes.
+
+    Returns:
+        config (dict): Sanitized video finder configuration with keys
+            ``search_query`` (str), ``max_results`` (int) and
+            ``must_match`` (List[str]).
+    """
+    defaults = {
+        "search_query": "Larry David Curb Your Enthusiasm",
+        "max_results": 15,
+        "must_match": ["larry david", "curb"],
+    }
+
+    with open(os.path.join(ROOT_DIR, "config.json"), "r") as file:
+        config_json = json.load(file)
+
+    raw_config = config_json.get("larry_david", {})
+    if not isinstance(raw_config, dict):
+        raw_config = {}
+
+    search_query = str(raw_config.get("search_query", defaults["search_query"])).strip()
+    if not search_query:
+        search_query = defaults["search_query"]
+
+    try:
+        max_results = int(raw_config.get("max_results", defaults["max_results"]))
+    except (TypeError, ValueError):
+        max_results = defaults["max_results"]
+    if max_results <= 0:
+        max_results = defaults["max_results"]
+
+    raw_terms = raw_config.get("must_match", defaults["must_match"])
+    if isinstance(raw_terms, list):
+        must_match = [str(term).strip().lower() for term in raw_terms if str(term).strip()]
+    else:
+        must_match = defaults["must_match"].copy()
+
+    return {
+        "search_query": search_query,
+        "max_results": max_results,
+        "must_match": must_match,
+    }

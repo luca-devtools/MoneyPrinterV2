@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Saved Videos — Video Finder</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>" />
+</head>
+<body data-page="saved">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/"><span class="dot"></span> Video Finder</a>
+      <nav class="nav">
+        <a href="/">Find</a>
+        <a href="/saved" class="active">Saved <span class="badge" id="savedBadge" data-count="0"></span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <div>
+        <h2>Saved videos</h2>
+        <span class="count" id="savedCount"></span>
+      </div>
+      <button class="btn btn-danger" id="clearAll">Clear all</button>
+    </div>
+
+    <div class="grid" id="savedGrid"></div>
+
+    <div class="state hidden" id="emptySaved">
+      <div class="big">📁</div>
+      Nothing saved yet. Head to <a href="/">Find</a> and save a few videos.
+    </div>
+
+    <p class="note">
+      Saved videos live in this browser's local storage. Clearing your browser
+      data or switching devices will not carry them over.
+    </p>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
